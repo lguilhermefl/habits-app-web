@@ -1,7 +1,11 @@
 import * as Checkbox from '@radix-ui/react-checkbox';
 import { Check } from 'phosphor-react';
 
-export function HabitsList() {
+interface HabitsListProps {
+  date: Date;
+}
+
+export function HabitsList({ date }: HabitsListProps) {
   return (
     <>
       <div className='mt-6 flex flex-col gap-3'>
