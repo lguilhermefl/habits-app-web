@@ -2,7 +2,7 @@ import * as Checkbox from '@radix-ui/react-checkbox';
 import dayjs from 'dayjs';
 import { Check } from 'phosphor-react';
 import { api } from '../lib/axios';
-import { calculateCompletedPercentage } from '../utils/calculateCompletedPercentage';
+import { calculateCompletedPercentage } from '../utils/calculate-completed-percentage';
 
 import { HabitsInfo } from './HabitModal';
 
