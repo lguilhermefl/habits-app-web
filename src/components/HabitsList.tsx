@@ -1,58 +1,49 @@
 import * as Checkbox from '@radix-ui/react-checkbox';
 import dayjs from 'dayjs';
 import { Check } from 'phosphor-react';
-import { useEffect, useState } from 'react';
 import { api } from '../lib/axios';
+import { calculateCompletedPercentage } from '../lib/calculateCompletedPercentage';
+
+import { HabitsInfo } from './HabitModal';
 
 interface HabitsListProps {
   date: Date;
-  onCompletedChanged: (completed: number) => void;
+  handleCompletedPercentage: (percentage: number) => void;
+  habitsInfo: HabitsInfo;
+  onCompletedChanged: (
+    habitsInfo: HabitsInfo,
+    completedHabits: string[]
+  ) => void;
 }
 
-interface HabitsInfo {
-  possibleHabits: {
-    id: string;
-    title: string;
-    created_at: string;
-  }[];
-  completedHabits: string[];
-}
-
-export function HabitsList({ date, onCompletedChanged }: HabitsListProps) {
-  const [habitsInfo, setHabitsInfo] = useState<HabitsInfo>();
-
-  useEffect(() => {
-    api
-      .get('day', {
-        params: {
-          date: date.toISOString(),
-        },
-      })
-      .then((response) => setHabitsInfo(response.data));
-  }, []);
-
+export function HabitsList({
+  date,
+  handleCompletedPercentage,
+  habitsInfo,
+  onCompletedChanged,
+}: HabitsListProps) {
   async function handleToggleHabit(habitId: string) {
     api.patch(`habits/${habitId}/toggle`);
 
     const isHabitAlreadyCompleted =
-      habitsInfo!.completedHabits.includes(habitId);
+      habitsInfo.completedHabits.includes(habitId);
 
     let completedHabits: string[] = [];
 
     if (isHabitAlreadyCompleted) {
-      completedHabits = habitsInfo!.completedHabits.filter(
+      completedHabits = habitsInfo.completedHabits.filter(
         (id) => id !== habitId
       );
     } else {
-      completedHabits = [...habitsInfo!.completedHabits, habitId];
+      completedHabits = [...habitsInfo.completedHabits, habitId];
     }
 
-    setHabitsInfo({
-      possibleHabits: habitsInfo!.possibleHabits,
-      completedHabits,
-    });
-
-    onCompletedChanged(completedHabits.length);
+    const updatedCompletedPercentage = calculateCompletedPercentage(
+      habitsInfo.possibleHabits.length,
+      completedHabits.length
+    );
+    handleCompletedPercentage(updatedCompletedPercentage);
+    onCompletedChanged(habitsInfo, completedHabits);
   }
 
   const isDateInPast = dayjs(date).endOf('day').isBefore(new Date());
