@@ -5,7 +5,7 @@ import { api } from '../lib/axios';
 
 import { HabitsList } from './HabitsList';
 import { ProgressBar } from './ProgressBar';
-import { calculateCompletedPercentage } from '../lib/calculateCompletedPercentage';
+import { calculateCompletedPercentage } from '../utils/calculateCompletedPercentage';
 
 interface HabitModalProps {
   date: Date;

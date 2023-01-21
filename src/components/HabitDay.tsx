@@ -2,7 +2,7 @@ import * as Popover from '@radix-ui/react-popover';
 import clsx from 'clsx';
 
 import { useState } from 'react';
-import { calculateCompletedPercentage } from '../lib/calculateCompletedPercentage';
+import { calculateCompletedPercentage } from '../utils/calculateCompletedPercentage';
 import { HabitModal } from './HabitModal';
 
 interface HabitDayProps {
